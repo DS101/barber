@@ -28,13 +28,13 @@ post '/visit' do
   @color = params[:color]
 
   hh = { user_name: "enter name",
-         phone: "enter phone",
+         phone: "enter phone",         
          date_time: "enter date and time" }
-  hh.each do |k ,v|
-    if params[k] == ''
-      @error = hh[k]
-      return erb :visit
-    end
+         
+  @error = hh.select {|key,_| params[key] == ""}.values.join(", ")
+
+  if @error != ''
+    return erb :visit
   end
   
   f = File.open("./public/test.txt", "a")
