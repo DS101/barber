@@ -2,7 +2,22 @@
 require 'rubygems'
 require 'sinatra'
 require 'sinatra/reloader'
-# require 'pony'
+require 'pony'
+require 'sqlite3'
+
+configure do
+  db = SQLite3::Database.new 'barbershop.db'
+  db.execute 'create table if not exists
+    "Users"
+    (
+      "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+      "name" TEXT,
+      "phone" TEXT,
+      "date_stamp" TEXT,
+      "barber" TEXT,
+      "color" TEXT
+    )'
+end
 
 get '/' do
 	erb "Hello! <a href=\"https://github.com/bootstrap-ruby/sinatra-bootstrap\">Original</a> pattern has been modified for <a href=\"http://rubyschool.us/\">Ruby School</a>"			
@@ -30,17 +45,17 @@ post '/visit' do
   hh = { user_name: "enter name",
          phone: "enter phone",         
          date_time: "enter date and time" }
-         
+
   @error = hh.select {|key,_| params[key] == ""}.values.join(", ")
 
   if @error != ''
     return erb :visit
   end
   
-  f = File.open("./public/test.txt", "a")
-  f.write "Name: #{@name}, Phone: #{@phone}, Date and time: #{@date_time}, Your barber: #{@barber} and you color #{@color}\n"
-  f.close
-  erb "Спасибо за то что Вы с нами"
+  db = SQLite3::Database.new 'barbershop.db'
+  db.execute 'insert into Users (name, phone, date_stamp, barber, color) 
+  values(?, ?, ?, ?, ?)', [@name, @phone, @date_time, @barber, @color]
+  erb "сэнк ю вэри мач"
 end
 
 post '/contacts' do
@@ -64,10 +79,5 @@ post '/contacts' do
       :domain               => 'localhost.localdomain'
   })
 
-   
-  # f = File.open("./public/contacts.txt", "a")
-  # f.write "Email: #{@email}\n Сообщение:\n #{@message}\n"
-  # f.write "-----------------------------------\n"
-  # f.close
   erb "Сообщение отправлено"
 end
