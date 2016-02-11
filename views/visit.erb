@@ -14,7 +14,7 @@
 
   <div class="form-group">
     <label>Когда вас ждать?</label>
-    <input name="date_time" type="date" class="form-control" value="<%= @date_time %>">
+    <input name="date_time" id="datetimepicker" type="text" class="form-control" value="<%= @date_time %>">
   </div>
 
   <div class="form-group">
@@ -50,7 +50,11 @@
 
 $(function($) {
   $('#color').simplecolorpicker();
+  $('#datetimepicker').datetimepicker({theme:'dark'});
+  $.datetimepicker.setLocale('ru');
 });
+
+// $('#datetimepicker').datetimepicker();
 
 
 </script>
