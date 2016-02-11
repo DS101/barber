@@ -81,3 +81,12 @@ post '/contacts' do
 
   erb "Сообщение отправлено"
 end
+
+get '/showusers' do
+  db = SQLite3::Database.new 'barbershop.db'
+  x = []
+  db.execute 'select * from Users' do |row|
+    x << row[1]
+  end
+  erb "#{x.to_s}"
+end
