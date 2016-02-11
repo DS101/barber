@@ -84,6 +84,7 @@ end
 
 get '/showusers' do
   db = SQLite3::Database.new 'barbershop.db'
+  db.results_as_hash = true
   x = []
   db.execute 'select * from Users' do |row|
     x << row[1]
